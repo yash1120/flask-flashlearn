@@ -2,3 +2,7 @@ flask
 flask_sqlalchemy
 flask_restful
 flask_login
+werkzeug.security
+datetime
+json
+gunicorn
