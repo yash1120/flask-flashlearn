@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+	<title>Review - FlashLearn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+	<style>
+		nav {
+			z-index:1;
+		}
+		.below_nav{
+			width: 100%;
+
+			padding-left: 20px;
+			padding-right: 20px;
+			overflow-y: scroll;
+			padding-bottom: 80px;
+		}
+		
+
+		.profile {
+			vertical-align: middle;
+
+		}
+
+		.below_nav::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+.below_nav::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+    height: 100%;
+}
+ 
+.below_nav::-webkit-scrollbar-thumb {
+    background-color: #000;
+    border-radius: 100px;
+}
+
+		body {
+    background-color: #e8eceb;
+}
+
+.card {
+    border: none;
+    border-radius: 10px
+}
+
+.c-details span {
+    font-weight: 300;
+    font-size: 13px
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px
+}
+
+.progress div {
+    background-color: black
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.text2 {
+    color: #a5aec0
+}
+		 
+.add_deck:hover {
+	background: #000;
+	color: #fff;
+}
+.add_deck{
+	transition: 0.5s;
+}
+
+.new_deck_input {
+outline: none;
+box-shadow:none !important;
+border:1px solid #ccc !important;
+}
+
+.dropdown-menu-right { 
+    right: 0; 
+    left: auto; 
+}
+
+.dropdown-toggle:focus {
+  background: #1f2a35;
+  color: #fff;
+}
+.dropdown-item:active {
+  background: #1f2a35;
+  color: #fff;
+}
+
+
+.scene {
+  width: 100%;
+  height: 260px;
+  margin: 40px 0;
+  perspective: 600px;
+}
+
+.scard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform-origin: center right;
+  transition: transform 0.9s;
+}
+
+.scard.is-flipped {
+  transform: translateX(-100%) rotateY(-180deg);
+}
+
+.scard__face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 260px;
+    border-radius: 10px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 40px;
+  backface-visibility: hidden;
+
+  display: flex; 
+align-content: center; 
+justify-content : center;
+}
+
+.scard__face--front {
+  background: #5d807d;
+}
+
+.scard__face--back {
+  background: #2d3e4e;
+  transform: rotateY(180deg);
+}
+
+
+.next_button:hover {
+  background: #1f2a35;
+  color: #fff;
+}
+.next_button{
+  transition: 0.5s;
+}
+
+.profile_button:hover {
+  background: #1f2a35;
+  color: #fff;
+}
+
+.profile_button:focus, .next_button:focus {
+  background: #1f2a35 !important;
+  color: #fff;
+  box-shadow:none;
+}
+
+
+	</style>
+  </head>
+  <body style="background-image: url(../static/background.jpg);">
+
+  <nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a href = "/dashboard" class="navbar-brand"><img src="../static/flash_logo.jpg"><strong>FlashLearn</strong></a>
+
+<div class="navigation">
+  <button class="btn btn-outline-dark dropdown-toggle profile_button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style= "transition: 0.5s;"><strong class = "profile">{% if current_user.is_authenticated %}{{current_user.username}}{% endif %}</strong>
+    
+<span class="material-icons md-24 profile">account_circle</span>
+  </button>
+  <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuButton">
+  <a class="dropdown-item" href="/edit_profile">Edit Profile</a>
+   <hr class="dropdown-divider">
+   <a class="dropdown-item" href="/logout">Logout</a>
+  </div>
+</div>
+
+
+    
+  </div>
+  
+</nav>
+<div class = "below_nav" style="position: fixed; min-height: 100%; height: 100%">
+    <!---
+    {% if error %}  
+        <div class="alert alert-danger" role="alert">{{error}}</div>
+    {% endif %}  
+  -->
+  <h3 class="mt-4" style="text-align: center;">Review Deck - {{deck["name"]}}</h3>
+ <div class="container card mt-4 mb-3 shadow" style="padding-left: 40px; padding-right: 40px;">
+  <div class="table">
+        <div class="row mt-1">
+    <div class="col-md-6 my-auto">
+                
+                <div class="scene scene--card" style="width: 100%;">
+  <div class="card scard shadow">
+    <div class="scard__face scard__face--front">{{card["front"]}}</div>
+    <div class="scard__face scard__face--back">{{card["back"]}}</div>
+  </div>
+</div>
+
+<h6 style="text-align: center; padding-top: 0px;">Click on the card to reveal the back side.</h6>
+
+    </div>
+    <div class="col-md-6 my-auto">
+      <div >
+      <div style="text-align: center;">
+        <form class="needs-validation" name = "next_card" method = "POST" action = "/review/{{deck["id"]}}">
+
+          <input type="hidden" name="id" value = "{{card["id"]}}">
+      <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="score" id="exampleRadios1" value="2" {% if card["score"] == 2 %}checked{% endif %} required>
+  <label class="form-check-label" for="exampleRadios1">
+    Easy
+  </label>
+  </div>
+  <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="score" id="exampleRadios2" value="1" {% if card["score"] == 1 %}checked{% endif %} required>
+  <label class="form-check-label" for="exampleRadios2">
+    Medium
+  </label>
+  </div>
+  <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="score" id="exampleRadios3" value="0" {% if card["score"] == 0 %}checked{% endif %} required>
+  <label class="form-check-label" for="exampleRadios3">
+    Hard
+  </label>
+</div>
+
+</div>
+<br>
+<div style="text-align: center;">
+      <button class = "btn btn-outline-dark next_button" type="submit" style="padding-left: 20px; padding-right: 20px;">Next</button>
+    </div>
+
+  </form>
+    </div>
+  </div>
+
+  </div>
+</div>
+</div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+  
+  var card = document.querySelector('.scard');
+card.addEventListener( 'click', function() {
+  card.classList.toggle('is-flipped');
+});
+</script>
+  </body>
+</html>

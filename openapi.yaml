@@ -1,0 +1,570 @@
+openapi: 3.0.0
+info:
+  title: "FlashCard App"
+  version: 1.0.0
+  description:
+    This is the Open API documentation for project Flashcard.
+    
+    <h2> ER Diagram </h2>
+    <img src = "https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgdXNlciB8fC0tb3sgZGVjayA6IFwiXCJcbiAgICBkZWNrIHtcbiAgICAgICAgaW50ZWdlciBpZCBcbiAgICAgICAgc3RyaW5nIG5hbWUgXG4gICAgICAgIGludGVnZXIgdXNlcl9pZFxuICAgICAgICBzdHJpbmcgbGFzdF9yZXZpZXdlZFxuICAgIH1cbiAgICB1c2VyIHtcbiAgICAgICAgaW50ZWdlciBpZCBcbiAgICAgICAgc3RyaW5nIHVzZXJuYW1lXG4gICAgICAgIHN0cmluZyBlbWFpbFxuICAgICAgICBzdHJpbmcgcGFzc3dvcmRcbiAgICAgICAgaW50ZWdlciBhY3RpdmUgXG4gICAgfVxuICAgIGRlY2sgfHwtLW97IGNhcmQgOiBcIlwiXG4gICAgY2FyZCB7XG4gICAgICAgIGludGVnZXIgaWQgXG4gICAgICAgIHN0cmluZyBmcm9udCBcbiAgICAgICAgc3RyaW5nIGJhY2sgXG4gICAgICAgIGludGVnZXIgc2NvcmUgXG4gICAgICAgIGludGVnZXIgZGVja19pZCBcbiAgICAgICAgc3RyaW5nIGxhc3RfcmV2aWV3ZWRcbiAgICB9XG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOnRydWUsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjpmYWxzZX0"/>
+    <h2> Error Codes </h2>
+    <table>
+      <thead>
+        <th> Resorce </th>
+        <th> Error Code </th>
+        <th> Message </th>
+      </thead>
+      <tbody>
+      <tr>
+        <td> User </td>
+        <td> BE1001 </td>
+        <td> username is required </td>
+      </tr>
+      <tr>
+        <td> User </td>
+        <td> BE1002 </td>
+        <td> email is required </td>
+      </tr>
+      <tr>
+        <td> User </td>
+        <td> BE1003 </td>
+        <td> password is required </td>
+      </tr>
+      <tr>
+        <td> User </td>
+        <td> BE1004 </td>
+        <td> Invalid email </td>
+      </tr>
+      <tr>
+        <td> User </td>
+        <td> BE1005 </td>
+        <td> Duplicate user </td>
+      </tr>
+      <tr>
+        <td> User </td>
+        <td> BE1006 </td>
+        <td> Email already exists </td>
+      </tr>
+      <tr>
+        <td> Deck </td>
+        <td> BE1008 </td>
+        <td> deck name is required </td>
+      </tr>
+      <tr>
+        <td> Deck </td>
+        <td> BE1009 </td>
+        <td> user_id is required </td>
+      </tr>
+      <tr>
+        <td> Card </td>
+        <td> BE1011 </td>
+        <td> front and back of card is required </td>
+      </tr>
+      <tr>
+        <td> Card </td>
+        <td> BE1012 </td>
+        <td> deck_id is required </td>
+      </tr>
+      </tbody>
+    </table>
+
+servers:
+- url: http://127.0.0.1:5000/
+paths:
+ /api/user/{username}:
+  description: >-
+    End point to read, update and delete a user resource with username.
+  get:
+    description: Operation to get a user details
+    parameters:
+    - in: path
+      name: username
+      required: true
+      schema:
+        type: string
+        example: test
+    responses:
+      '200':
+        description: Success
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 5
+                username:
+                  type: string
+                  example: test
+                email:
+                  type: string
+                  example: test@example.com
+      '404':
+        description: Resource not found.
+      '500':
+        description: Internal Server Error.
+        
+  put:
+    description: Operation to update the user detail
+    parameters:
+    - in: path
+      name: username
+      required: true
+      schema:
+        type: string
+        example: test
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: test@example.org
+    responses:
+      '200':
+        description: Successfully updated.
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 5
+                username:
+                  type: string
+                  example: test
+                email:
+                  type: string
+                  example: test@example.org
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '404':
+        description: Resource you requested to update not found.
+      '500':
+        description: Internal Server Error.
+  
+  
+  delete:
+    description: Operation to delete the user
+    parameters:
+    - in: path
+      name: username
+      required: true
+      schema:
+        type: string
+        example: raj
+    responses:
+      '200':
+        description: Successfully Deleted.
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '404':
+        description: user does not exist.
+      '500':
+        description: Internal Server Error.
+      
+ /api/user:
+  description: End point to create a user.
+  post:
+    description: Operation to create the user
+    requestBody:
+      content:
+        application/json:
+          schema:
+            title: user object
+            type: object
+            properties:
+              username:
+                type: string
+                example: test
+              email:
+                type: string
+                example: test@example.org
+              password:
+                type: string
+                example: '123456'
+    responses:
+      '201':
+        description: Successfully Created.
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '409':
+        description: username already exist.
+      '500':
+        description: Internal Server Error.
+
+ /api/deck/{id}:
+  description: >-
+    End point to read, update and delete a deck resource with deck_id.
+  get:
+    description: Operation to get a deck details
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    responses:
+      '200':
+        description: Success
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 5
+                name:
+                  type: string
+                  example: test
+                last_reviewed:
+                  type: string
+                  example: 2021-11-26 05:36:50.231649
+      '404':
+        description: Resource not found.
+      '500':
+        description: Internal Server Error.
+        
+  put:
+    description: Operation to update the deck detail
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: test deck
+    responses:
+      '200':
+        description: Successfully updated.
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 5
+                name:
+                  type: string
+                  example: test
+                last_reviewed:
+                  type: string
+                  example: 2021-11-26 05:36:50.231649
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '404':
+        description: Resource you requested to update not found.
+      '500':
+        description: Internal Server Error.
+  
+  
+  delete:
+    description: Operation to delete the deck
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    responses:
+      '200':
+        description: Successfully Deleted.
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '404':
+        description: deck does not exist.
+      '500':
+        description: Internal Server Error.
+      
+ /api/deck:
+  description: End point to create a deck.
+  post:
+    description: Operation to create the deck
+    requestBody:
+      content:
+        application/json:
+          schema:
+            title: user object
+            type: object
+            properties:
+              name:
+                type: string
+                example: test
+              user_id:
+                type: integer
+                example: 1
+    responses:
+      '201':
+        description: Successfully Created.
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '500':
+        description: Internal Server Error.
+
+ /api/deck/score/{id}:
+  description: >-
+    End point to get score of a deck resource with deck_id.
+  get:
+    description: Operation to get score of a deck
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    responses:
+      '200':
+        description: Success
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 5
+                score:
+                  type: integer
+                  example: 50
+      '404':
+        description: Resource not found.
+      '500':
+        description: Internal Server Error.
+        
+
+ /api/card/{id}:
+  description: >-
+    End point to read, update and delete a card resource with card_id.
+  get:
+    description: Operation to get a card details
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    responses:
+      '200':
+        description: Success
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 5
+                front:
+                  type: string
+                  example: front side
+                back:
+                  type: string
+                  example: back side
+                deck_id:
+                  type: integer
+                  example: 1
+                last_reviewed:
+                  type: string
+                  example: 2021-11-26 05:36:50.231649
+      '404':
+        description: Resource not found.
+      '500':
+        description: Internal Server Error.
+        
+  put:
+    description: Operation to update the card details
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              front:
+                type: string
+                example: front card
+              back:
+                type: string
+                example: back card
+    responses:
+      '200':
+        description: Successfully updated.
+        content:
+          application/json:
+            schema:
+              title: user object
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 5
+                front:
+                  type: string
+                  example: front card
+                back:
+                  type: string
+                  example: back card
+                score:
+                  type: integer
+                  example: 2
+                deck_id:
+                  type: integer
+                  example: 1
+                last_reviewed:
+                  type: string
+                  example: 2021-11-26 05:36:50.231649
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '404':
+        description: Resource you requested to update not found.
+      '500':
+        description: Internal Server Error.
+  
+  
+  delete:
+    description: Operation to delete the card
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        example: 1
+    responses:
+      '200':
+        description: Successfully Deleted.
+      '404':
+        description: card does not exist.
+      '500':
+        description: Internal Server Error.
+      
+ /api/card:
+  description: End point to create a card.
+  post:
+    description: Operation to create the card
+    requestBody:
+      content:
+        application/json:
+          schema:
+            title: user object
+            type: object
+            properties:
+              front:
+                type: string
+                example: front card
+              back:
+                type: string
+                example: back card
+              deck_id:
+                type: integer
+                example: 1
+    responses:
+      '201':
+        description: Successfully Created.
+      '400':
+        description: Bad request.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error_code:
+                  type: string
+                error_message:
+                  type: string
+      '500':
+        description: Internal Server Error.
