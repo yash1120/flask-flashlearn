@@ -4,5 +4,4 @@ flask_restful
 flask_login
 werkzeug
 datetime
-json
 gunicorn
